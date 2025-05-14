@@ -24,7 +24,7 @@ export function Navbar() {
             <Input
               type="search"
               placeholder="Search..."
-              className="w-[200px] lg:w-[300px] pl-8 bg-background"
+              className="w-[200px] lg:w-[300px] pl-8 bg-secondary border-none focus:ring-primary"
             />
           </div>
 
@@ -42,9 +42,9 @@ export function Navbar() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                <Avatar className="h-8 w-8">
+                <Avatar className="h-8 w-8 ring-2 ring-primary/20">
                   <AvatarImage src="" alt="User" />
-                  <AvatarFallback>US</AvatarFallback>
+                  <AvatarFallback className="bg-primary/10 text-primary">US</AvatarFallback>
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>

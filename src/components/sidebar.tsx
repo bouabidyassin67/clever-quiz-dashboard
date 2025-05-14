@@ -1,6 +1,6 @@
 
 import { Link } from "react-router-dom";
-import { Book, Calendar, Home, LayoutDashboard, BrainCircuit, GraduationCap, TestTube } from "lucide-react";
+import { Book, Calendar, BrainCircuit, Music, GraduationCap, TestTube, Home, LayoutDashboard } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -29,6 +29,11 @@ const navItems = [
     href: "/quizzes",
     icon: TestTube,
   },
+  {
+    title: "Music",
+    href: "/music",
+    icon: Music,
+  },
 ];
 
 export function Sidebar() {
@@ -37,7 +42,9 @@ export function Sidebar() {
       <div className="flex flex-col h-full py-4">
         <div className="flex justify-center md:justify-start md:px-6 mb-8">
           <Link to="/" className="flex items-center">
-            <GraduationCap className="w-8 h-8 text-primary" />
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 flex items-center justify-center text-white">
+              <GraduationCap className="w-5 h-5" />
+            </div>
             <span className="hidden md:block ml-2 text-xl font-semibold">LearnPulse</span>
           </Link>
         </div>

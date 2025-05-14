@@ -12,12 +12,13 @@ import Courses from "./pages/Courses";
 import Calendar from "./pages/Calendar";
 import IQTests from "./pages/IQTests";
 import Quizzes from "./pages/Quizzes";
+import Music from "./pages/Music";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <ThemeProvider defaultTheme="light">
+    <ThemeProvider defaultTheme="dark">
       <TooltipProvider>
         <Toaster />
         <Sonner />
@@ -28,6 +29,7 @@ const App = () => (
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/iq-tests" element={<IQTests />} />
             <Route path="/quizzes" element={<Quizzes />} />
+            <Route path="/music" element={<Music />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
