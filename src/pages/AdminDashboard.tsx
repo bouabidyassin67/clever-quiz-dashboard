@@ -36,8 +36,17 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
+// Define the course type to ensure consistent structure
+interface Course {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  image: string;
+}
+
 // Example course data
-const initialCourses = [
+const initialCourses: Course[] = [
   {
     id: "1",
     title: "Introduction to Blockchain",
@@ -65,7 +74,7 @@ type CourseFormValues = z.infer<typeof courseSchema>;
 
 const AdminDashboard = () => {
   const { isAdmin } = useAuth();
-  const [courses, setCourses] = useState(initialCourses);
+  const [courses, setCourses] = useState<Course[]>(initialCourses);
   const [isEditing, setIsEditing] = useState<string | null>(null);
 
   const form = useForm<CourseFormValues>({
@@ -80,19 +89,30 @@ const AdminDashboard = () => {
 
   const onSubmit = (values: CourseFormValues) => {
     if (isEditing) {
-      // Update existing course
+      // Update existing course - ensure we maintain the required structure
       setCourses(
         courses.map((course) =>
-          course.id === isEditing ? { ...course, ...values } : course
+          course.id === isEditing 
+            ? { 
+                ...course, 
+                title: values.title,
+                description: values.description,
+                category: values.category,
+                image: values.image || course.image 
+              } 
+            : course
         )
       );
       toast.success("Course updated successfully!");
       setIsEditing(null);
     } else {
-      // Add new course
-      const newCourse = {
+      // Add new course with required structure
+      const newCourse: Course = {
         id: Math.random().toString(36).substring(2),
-        ...values,
+        title: values.title,
+        description: values.description,
+        category: values.category,
+        image: values.image || "https://via.placeholder.com/300x200",
       };
       setCourses([...courses, newCourse]);
       toast.success("Course added successfully!");
