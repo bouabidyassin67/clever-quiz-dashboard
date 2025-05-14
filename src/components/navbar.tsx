@@ -1,5 +1,5 @@
 
-import { Bell, MessageSquare, Search, LogOut } from "lucide-react";
+import { Bell, MessageSquare, Search, LogOut, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -38,14 +38,35 @@ export function Navbar() {
             />
           </div>
 
-          <Button variant="ghost" size="icon" className="relative">
-            <Bell className="h-5 w-5" />
-            <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-primary" />
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="relative">
+                <Bell className="h-5 w-5" />
+                <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-primary" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem className="flex items-center">
+                <span className="flex items-center mr-2 pr-2 border-r border-gray-300">
+                  <Bell className="h-4 w-4 text-muted-foreground" />
+                </span>
+                New message from John
+                </DropdownMenuItem>
+              <DropdownMenuItem className="flex items-center">
+                <span className="flex items-center mr-2 pr-2 border-r border-gray-300">
+                  <MessageSquare className="h-4 w-4 text-blue-500" />
+                </span>
+                Course deadline approaching
+                </DropdownMenuItem>
+              <DropdownMenuItem className="flex items-center">
+                <span className="flex items-center mr-2 pr-2 border-r border-gray-300">
 
-          <Button variant="ghost" size="icon">
-            <MessageSquare className="h-5 w-5" />
-          </Button>
+                  <AlertCircle className="h-4 w-4 text-orange-500" />
+                </span>
+                Your report is ready
+                <span>Course deadline approaching</span></DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
           <ThemeSwitcher />
 

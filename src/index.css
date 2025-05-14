@@ -10,7 +10,7 @@
     --background: 240 50% 98%;
     --foreground: 240 10% 3.9%;
     
-    --card: 0 0% 100%;
+    --card: 240 20% 96%;
     --card-foreground: 240 10% 3.9%;
     
     --popover: 0 0% 100%;
@@ -31,7 +31,7 @@
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     
-    --border: 240 5.9% 90%;
+    --border: 240 5.9% 85%;
     --input: 240 5.9% 90%;
     --ring: 255 92% 76%;
     

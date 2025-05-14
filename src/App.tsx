@@ -17,6 +17,7 @@ import Music from "./pages/Music";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import AdminDashboard from "./pages/AdminDashboard";
+import GlobalChatPopup from './components/GlobalChatPopup';
 import ProtectedRoute from "@/components/ProtectedRoute";
 
 const queryClient = new QueryClient();
@@ -78,6 +79,7 @@ const App = () => (
             </Routes>
           </BrowserRouter>
         </AuthProvider>
+ <GlobalChatPopup />
       </TooltipProvider>
     </ThemeProvider>
   </QueryClientProvider>
