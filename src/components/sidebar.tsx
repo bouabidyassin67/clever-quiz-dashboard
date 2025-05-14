@@ -1,42 +1,55 @@
 
-import { Link } from "react-router-dom";
-import { Book, Calendar, BrainCircuit, Music, GraduationCap, TestTube, Home, LayoutDashboard } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { Book, Calendar, BrainCircuit, Music, GraduationCap, TestTube, Settings, LayoutDashboard } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-const navItems = [
-  {
-    title: "Dashboard",
-    href: "/",
-    icon: LayoutDashboard,
-  },
-  {
-    title: "Courses",
-    href: "/courses",
-    icon: Book,
-  },
-  {
-    title: "Calendar",
-    href: "/calendar",
-    icon: Calendar,
-  },
-  {
-    title: "IQ Tests",
-    href: "/iq-tests",
-    icon: BrainCircuit,
-  },
-  {
-    title: "Quizzes",
-    href: "/quizzes",
-    icon: TestTube,
-  },
-  {
-    title: "Music",
-    href: "/music",
-    icon: Music,
-  },
-];
+import { useAuth } from "@/contexts/AuthContext";
 
 export function Sidebar() {
+  const location = useLocation();
+  const { isAdmin } = useAuth();
+  
+  const navItems = [
+    {
+      title: "Dashboard",
+      href: "/",
+      icon: LayoutDashboard,
+    },
+    {
+      title: "Courses",
+      href: "/courses",
+      icon: Book,
+    },
+    {
+      title: "Calendar",
+      href: "/calendar",
+      icon: Calendar,
+    },
+    {
+      title: "IQ Tests",
+      href: "/iq-tests",
+      icon: BrainCircuit,
+    },
+    {
+      title: "Quizzes",
+      href: "/quizzes",
+      icon: TestTube,
+    },
+    {
+      title: "Music",
+      href: "/music",
+      icon: Music,
+    },
+  ];
+
+  // Admin-only navigation items
+  const adminItems = [
+    {
+      title: "Admin Dashboard",
+      href: "/admin",
+      icon: GraduationCap,
+    },
+  ];
+
   return (
     <div className="h-screen sticky top-0 w-16 md:w-64 bg-sidebar border-r border-border shrink-0 overflow-y-auto">
       <div className="flex flex-col h-full py-4">
@@ -58,7 +71,27 @@ export function Sidebar() {
                 "flex items-center py-2 px-2 md:px-4 rounded-md transition-colors",
                 "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                 "focus:bg-sidebar-accent focus:text-sidebar-accent-foreground",
-                window.location.pathname === item.href 
+                location.pathname === item.href 
+                  ? "bg-primary/10 text-primary font-medium" 
+                  : "text-sidebar-foreground"
+              )}
+            >
+              <item.icon className="h-5 w-5 shrink-0" />
+              <span className="hidden md:block ml-3">{item.title}</span>
+            </Link>
+          ))}
+
+          {/* Show admin navigation items if user is admin */}
+          {isAdmin && adminItems.map((item) => (
+            <Link
+              key={item.href}
+              to={item.href}
+              className={cn(
+                "flex items-center py-2 px-2 md:px-4 rounded-md transition-colors",
+                "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                "focus:bg-sidebar-accent focus:text-sidebar-accent-foreground",
+                "border-l-4 border-primary",
+                location.pathname === item.href 
                   ? "bg-primary/10 text-primary font-medium" 
                   : "text-sidebar-foreground"
               )}
@@ -74,7 +107,7 @@ export function Sidebar() {
             to="/settings"
             className="flex items-center py-2 px-2 md:px-4 rounded-md transition-colors text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
           >
-            <Home className="h-5 w-5" />
+            <Settings className="h-5 w-5" />
             <span className="hidden md:block ml-3">Settings</span>
           </Link>
         </div>
