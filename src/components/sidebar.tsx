@@ -45,7 +45,7 @@ export function Sidebar() {
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 flex items-center justify-center text-white">
               <GraduationCap className="w-5 h-5" />
             </div>
-            <span className="hidden md:block ml-2 text-xl font-semibold">LearnPulse</span>
+            <span className="hidden md:block ml-2 text-xl font-semibold">DFI Blockchain</span>
           </Link>
         </div>
         

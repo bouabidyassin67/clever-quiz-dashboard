@@ -3,7 +3,7 @@ import { Sidebar } from "@/components/sidebar";
 import { Navbar } from "@/components/navbar";
 import { MusicPlayer } from "@/components/dashboard/music-player";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Music as MusicIcon } from "lucide-react";
+import { Music as MusicIcon, Youtube } from "lucide-react";
 
 const Music = () => {
   return (
@@ -15,9 +15,9 @@ const Music = () => {
           <div className="mx-auto">
             <div className="flex flex-col space-y-6">
               <div>
-                <h1 className="text-3xl font-bold tracking-tight">Music</h1>
+                <h1 className="text-3xl font-bold tracking-tight">DFI Blockchain Music</h1>
                 <p className="text-muted-foreground mt-1">
-                  Listen to your favorite tracks while studying
+                  Listen to your favorite tracks while exploring DFI Blockchain
                 </p>
               </div>
 
@@ -26,7 +26,10 @@ const Music = () => {
 
                 <Card className="dashboard-card">
                   <CardHeader>
-                    <CardTitle className="text-lg font-medium">How to use</CardTitle>
+                    <CardTitle className="text-lg font-medium flex items-center gap-2">
+                      <Youtube className="h-5 w-5 text-red-500" />
+                      How to use
+                    </CardTitle>
                     <CardDescription>Instructions for using the music player</CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -52,7 +55,7 @@ const Music = () => {
                           <span className="font-bold">3</span>
                         </div>
                         <div>
-                          <p>Press the button to load and play the music</p>
+                          <p>Press the button or Enter key to play the music</p>
                         </div>
                       </div>
                       
