@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
 
-export function Navbar({ collapsed, toggleSidebar }: { collapsed?: boolean, toggleSidebar?: () => void }) {
+export function Navbar({ collapsed, toggleSidebar }: { collapsed: boolean, toggleSidebar: () => void }) {
   const { user, logout, isAdmin } = useAuth();
   const navigate = useNavigate();
 

@@ -1,16 +1,18 @@
 
 import { Sidebar } from "@/components/sidebar";
 import { Navbar } from "@/components/navbar";
-import { MusicPlayer } from "@/components/dashboard/music-player";
+import { useSidebar } from "@/components/sidebar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Music as MusicIcon, Youtube } from "lucide-react";
 
 const Music = () => {
+  const { collapsed, toggleSidebar } = useSidebar();
+  
   return (
     <div className="flex min-h-screen w-full bg-background">
-      <Sidebar />
+      <Sidebar collapsed={collapsed} onToggle={toggleSidebar} />
       <div className="flex flex-col flex-1">
-        <Navbar />
+        <Navbar collapsed={collapsed} toggleSidebar={toggleSidebar} />
         <main className="flex-1 p-4 md:p-6">
           <div className="mx-auto">
             <div className="flex flex-col space-y-6">
@@ -21,16 +23,14 @@ const Music = () => {
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <MusicPlayer />
-
+              <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
                 <Card className="dashboard-card">
                   <CardHeader>
                     <CardTitle className="text-lg font-medium flex items-center gap-2">
                       <Youtube className="h-5 w-5 text-red-500" />
-                      How to use
+                      How to use the Music Player
                     </CardTitle>
-                    <CardDescription>Instructions for using the music player</CardDescription>
+                    <CardDescription>Instructions for using the global music player</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
@@ -39,7 +39,7 @@ const Music = () => {
                           <span className="font-bold">1</span>
                         </div>
                         <div>
-                          <p>Copy a YouTube video link</p>
+                          <p>Click on the music icon in the bottom-right corner</p>
                         </div>
                       </div>
                       <div className="flex gap-3">
@@ -47,7 +47,7 @@ const Music = () => {
                           <span className="font-bold">2</span>
                         </div>
                         <div>
-                          <p>Paste it into the input field</p>
+                          <p>Paste a YouTube video link into the input field</p>
                         </div>
                       </div>
                       <div className="flex gap-3">
@@ -56,6 +56,14 @@ const Music = () => {
                         </div>
                         <div>
                           <p>Press the button or Enter key to play the music</p>
+                        </div>
+                      </div>
+                      <div className="flex gap-3">
+                        <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center">
+                          <span className="font-bold">4</span>
+                        </div>
+                        <div>
+                          <p>Your music will continue playing as you navigate through the app!</p>
                         </div>
                       </div>
                       

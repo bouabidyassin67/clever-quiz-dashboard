@@ -3,12 +3,23 @@ import { Link, useLocation } from "react-router-dom";
 import { Book, Calendar, BrainCircuit, Music, GraduationCap, TestTube, Settings, LayoutDashboard } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export function Sidebar() {
+export function Sidebar({ collapsed: collapsedProp, onToggle }: { collapsed?: boolean, onToggle?: () => void }) {
   const location = useLocation();
   const { isAdmin } = useAuth();
-  const [collapsed, setCollapsed] = useState(false);
+  const [internalCollapsed, setInternalCollapsed] = useState(false);
+  
+  // Use either the prop value (if provided) or the internal state
+  const collapsed = collapsedProp !== undefined ? collapsedProp : internalCollapsed;
+  
+  const toggleSidebar = () => {
+    if (onToggle) {
+      onToggle();
+    } else {
+      setInternalCollapsed(!internalCollapsed);
+    }
+  };
   
   const navItems = [
     {
@@ -89,7 +100,7 @@ export function Sidebar() {
                   : "text-sidebar-foreground"
               )}
             >
-              <item.icon className="h-5 w-5 shrink-0" />
+              <item.icon className={cn("h-5 w-5 shrink-0", collapsed && "mx-auto")} />
               {!collapsed && <span className="hidden md:block ml-3">{item.title}</span>}
             </Link>
           ))}
@@ -110,7 +121,7 @@ export function Sidebar() {
                   : "text-sidebar-foreground"
               )}
             >
-              <item.icon className="h-5 w-5 shrink-0" />
+              <item.icon className={cn("h-5 w-5 shrink-0", collapsed && "mx-auto")} />
               {!collapsed && <span className="hidden md:block ml-3">{item.title}</span>}
             </Link>
           ))}
@@ -124,7 +135,7 @@ export function Sidebar() {
               collapsed ? "justify-center" : ""
             )}
           >
-            <Settings className="h-5 w-5" />
+            <Settings className={cn("h-5 w-5", collapsed && "mx-auto")} />
             {!collapsed && <span className="hidden md:block ml-3">Settings</span>}
           </Link>
         </div>
