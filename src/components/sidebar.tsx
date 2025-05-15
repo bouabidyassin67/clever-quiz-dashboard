@@ -1,6 +1,6 @@
 
 import { Link, useLocation } from "react-router-dom";
-import { Book, Calendar, BrainCircuit, Music, GraduationCap, TestTube, Settings, LayoutDashboard, ChevronLeft, ChevronRight } from "lucide-react";
+import { Book, Calendar, BrainCircuit, Music, GraduationCap, TestTube, Settings, LayoutDashboard } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { useState } from "react";
@@ -61,8 +61,8 @@ export function Sidebar() {
     >
       <div className="flex flex-col h-full py-4">
         <div className={cn(
-          "flex justify-center md:justify-start md:px-6 mb-8",
-          collapsed && "md:justify-center md:px-0"
+          "flex justify-center mb-8", 
+          !collapsed && "md:justify-start md:px-6"
         )}>
           <Link to="/" className="flex items-center">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 flex items-center justify-center text-white">
@@ -83,6 +83,7 @@ export function Sidebar() {
                 "flex items-center py-2 px-2 md:px-4 rounded-md transition-colors",
                 "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                 "focus:bg-sidebar-accent focus:text-sidebar-accent-foreground",
+                collapsed ? "justify-center" : "",
                 location.pathname === item.href 
                   ? "bg-primary/10 text-primary font-medium" 
                   : "text-sidebar-foreground"
@@ -103,6 +104,7 @@ export function Sidebar() {
                 "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                 "focus:bg-sidebar-accent focus:text-sidebar-accent-foreground",
                 "border-l-4 border-primary",
+                collapsed ? "justify-center" : "",
                 location.pathname === item.href 
                   ? "bg-primary/10 text-primary font-medium" 
                   : "text-sidebar-foreground"
@@ -117,24 +119,23 @@ export function Sidebar() {
         <div className="px-2 md:px-4 mt-auto pt-2 border-t border-border">
           <Link
             to="/settings"
-            className="flex items-center py-2 px-2 md:px-4 rounded-md transition-colors text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+            className={cn(
+              "flex items-center py-2 px-2 md:px-4 rounded-md transition-colors text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+              collapsed ? "justify-center" : ""
+            )}
           >
             <Settings className="h-5 w-5" />
             {!collapsed && <span className="hidden md:block ml-3">Settings</span>}
           </Link>
         </div>
-
-        {/* Collapse toggle button */}
-        <button 
-          className="flex justify-center items-center mt-4 mx-auto p-2 rounded-md hover:bg-sidebar-accent text-sidebar-foreground"
-          onClick={() => setCollapsed(!collapsed)}
-        >
-          {collapsed ? 
-            <ChevronRight className="h-5 w-5" /> : 
-            <ChevronLeft className="h-5 w-5" />
-          }
-        </button>
       </div>
     </div>
   );
+}
+
+export function useSidebar() {
+  const [collapsed, setCollapsed] = useState(false);
+  const toggleSidebar = () => setCollapsed(!collapsed);
+  
+  return { collapsed, toggleSidebar };
 }
