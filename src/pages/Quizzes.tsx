@@ -1,7 +1,6 @@
 
 import { Sidebar } from "@/components/sidebar";
 import { Navbar } from "@/components/navbar";
-import { useSidebar } from "@/components/sidebar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -42,13 +41,11 @@ const quizzes = [
 ];
 
 const Quizzes = () => {
-  const { collapsed, toggleSidebar } = useSidebar();
-  
   return (
     <div className="flex min-h-screen w-full bg-background">
-      <Sidebar collapsed={collapsed} onToggle={toggleSidebar} />
+      <Sidebar />
       <div className="flex flex-col flex-1">
-        <Navbar collapsed={collapsed} toggleSidebar={toggleSidebar} />
+        <Navbar />
         <main className="flex-1 p-4 md:p-6">
           <div className="mx-auto">
             <h1 className="text-3xl font-bold tracking-tight">Quizzes</h1>
