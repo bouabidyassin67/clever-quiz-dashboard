@@ -3,12 +3,11 @@ import { Link, useLocation } from "react-router-dom";
 import { Book, Calendar, BrainCircuit, Music, GraduationCap, TestTube, Settings, LayoutDashboard } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export function Sidebar() {
+export function Sidebar({ collapsed = false }) {
   const location = useLocation();
   const { isAdmin } = useAuth();
-  const [collapsed, setCollapsed] = useState(false);
   
   const navItems = [
     {

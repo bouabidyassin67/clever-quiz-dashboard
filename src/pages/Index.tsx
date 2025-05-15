@@ -11,7 +11,7 @@ const Dashboard = () => {
   
   return (
     <div className="flex min-h-screen w-full bg-background">
-      <Sidebar />
+      <Sidebar collapsed={collapsed} />
       <div className="flex flex-col flex-1">
         <Navbar collapsed={collapsed} toggleSidebar={toggleSidebar} />
         <main className="flex-1 p-4 md:p-6">

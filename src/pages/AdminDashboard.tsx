@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Sidebar } from "@/components/sidebar";
+import { Sidebar, useSidebar } from "@/components/sidebar";
 import { Navbar } from "@/components/navbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -74,6 +74,7 @@ type CourseFormValues = z.infer<typeof courseSchema>;
 
 const AdminDashboard = () => {
   const { isAdmin } = useAuth();
+  const { collapsed, toggleSidebar } = useSidebar();
   const [courses, setCourses] = useState<Course[]>(initialCourses);
   const [isEditing, setIsEditing] = useState<string | null>(null);
 
@@ -144,9 +145,9 @@ const AdminDashboard = () => {
 
   return (
     <div className="flex min-h-screen w-full bg-background">
-      <Sidebar />
+      <Sidebar collapsed={collapsed} />
       <div className="flex flex-col flex-1">
-        <Navbar />
+        <Navbar collapsed={collapsed} toggleSidebar={toggleSidebar} />
         <main className="flex-1 p-4 md:p-6">
           <div className="mx-auto max-w-7xl">
             <h1 className="text-3xl font-bold tracking-tight">Admin Dashboard</h1>
