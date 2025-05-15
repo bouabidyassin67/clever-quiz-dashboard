@@ -19,6 +19,7 @@ import Settings from "./pages/Settings";
 import AdminDashboard from "./pages/AdminDashboard";
 import GlobalChatPopup from './components/GlobalChatPopup';
 import MusicPlayerPopup from './components/MusicPlayerPopup';
+import MusicPlayer from './components/MusicPlayer';
 import ProtectedRoute from "@/components/ProtectedRoute";
 
 const queryClient = new QueryClient();
@@ -84,6 +85,7 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
+          <MusicPlayer /> {/* Render the MusicPlayer here to ensure it's always mounted */}
           <GlobalChatPopup />
           <MusicPlayerPopup />
         </AuthProvider>

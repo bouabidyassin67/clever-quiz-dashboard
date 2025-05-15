@@ -1,82 +1,90 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Music, X, Play, Pause, SkipBack, SkipForward, Volume2, ExternalLink, Youtube } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import {
+  Music,
+  X,
+  Play,
+  Pause,
+  SkipBack,
+  SkipForward,
+  Volume2,
+  ExternalLink,
+  Youtube,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { toast } from 'sonner';
+import { useMusicPlayerStore } from '@/lib/store';
+
+const getEmbedUrl = (url: string): string | null => {
+  const match = url.match(/(?:youtu\.be\/|v=)([\w-]{11})/);
+  return match ? `https://www.youtube.com/embed/${match[1]}` : null;
+};
 
 const MusicPlayerPopup: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
   const [youtubeUrl, setYoutubeUrl] = useState('');
-  const [embedUrl, setEmbedUrl] = useState('');
   const [history, setHistory] = useState<string[]>([]);
-  const audioRef = useRef<HTMLIFrameElement>(null);
-  
-  // Load history from localStorage on component mount
+
+  const { currentTrack, isPlaying, loadTrack, togglePlayPause } =
+    useMusicPlayerStore();
+
   useEffect(() => {
     const savedHistory = localStorage.getItem('music-history');
     if (savedHistory) {
       try {
         setHistory(JSON.parse(savedHistory));
       } catch (e) {
-        console.error("Failed to parse music history", e);
+        console.error('Failed to parse music history', e);
       }
     }
   }, []);
-  
-  // Save history to localStorage when it changes
+
   useEffect(() => {
     localStorage.setItem('music-history', JSON.stringify(history));
   }, [history]);
-  
-  const togglePlayPause = () => {
-    setIsPlaying(!isPlaying);
-    // In a real implementation, we would use the YouTube iframe API to control playback
-  };
-  
+
   const handleYoutubeLink = () => {
     if (!youtubeUrl) {
-      toast.error("Please enter a YouTube URL");
+      toast.error('Please enter a YouTube URL');
       return;
     }
-    
+
+    const embedUrl = getEmbedUrl(youtubeUrl);
+
+    if (!embedUrl) {
+      toast.error('Invalid YouTube URL format.');
+      return;
+    }
+
     try {
-      // Extract video ID from YouTube URL
-      const videoId = youtubeUrl.match(/(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/)?.[1];
-      
-      if (videoId) {
-        const newEmbedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-        setEmbedUrl(newEmbedUrl);
-        setIsPlaying(true);
-        
-        // Add to history if not already there
-        if (!history.includes(youtubeUrl)) {
-          setHistory(prev => [youtubeUrl, ...prev.slice(0, 4)]);
-        }
-        
-        toast.success("Now playing from YouTube");
-      } else {
-        toast.error("Invalid YouTube URL. Please enter a valid YouTube video link.");
+      loadTrack(youtubeUrl);
+
+      if (!history.includes(youtubeUrl)) {
+        setHistory((prev) => [youtubeUrl, ...prev.slice(0, 4)]);
       }
+
+      toast.success('Now playing from YouTube');
     } catch (error) {
-      console.error("Invalid YouTube URL", error);
-      toast.error("Something went wrong. Please try again.");
+      console.error('Invalid YouTube URL', error);
+      toast.error('Something went wrong. Please try again.');
     }
   };
-  
-  // Handle pressing Enter in the input field
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       handleYoutubeLink();
     }
   };
-  
+
   const playFromHistory = (url: string) => {
     setYoutubeUrl(url);
     setTimeout(() => {
       handleYoutubeLink();
     }, 100);
+  };
+
+  const handleClosePopup = () => {
+    setIsOpen(false);
   };
 
   return (
@@ -88,16 +96,21 @@ const MusicPlayerPopup: React.FC = () => {
               <Youtube className="h-4 w-4 text-red-500" />
               Music Player
             </h3>
-            <Button variant="ghost" size="sm" onClick={() => setIsOpen(false)} className="hover:bg-accent hover:text-accent-foreground">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleClosePopup}
+              className="hover:bg-accent hover:text-accent-foreground"
+            >
               <X className="h-4 w-4" />
             </Button>
           </div>
-          
+
           <div className="flex-1 overflow-y-auto p-3 space-y-4">
             <div className="flex items-center space-x-2">
-              <Input 
-                type="text" 
-                placeholder="Paste YouTube URL here" 
+              <Input
+                type="text"
+                placeholder="Paste YouTube URL here"
                 value={youtubeUrl}
                 onChange={(e) => setYoutubeUrl(e.target.value)}
                 onKeyDown={handleKeyDown}
@@ -107,60 +120,56 @@ const MusicPlayerPopup: React.FC = () => {
                 <ExternalLink className="h-4 w-4" />
               </Button>
             </div>
-            
-            {embedUrl && (
-              <div className="w-full rounded-md overflow-hidden bg-black/10">
-                <AspectRatio ratio={16 / 9}>
-                  <iframe
-                    ref={audioRef}
-                    width="100%"
-                    height="100%"
-                    src={embedUrl}
-                    title="YouTube music player"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    className="border-0"
-                  ></iframe>
-                </AspectRatio>
-              </div>
-            )}
-            
-            {!embedUrl && (
-              <div className="flex items-center justify-between">
+
+            <div className="flex items-center justify-between">
+              {currentTrack && currentTrack.embedUrl ? (
+                <div className="text-sm text-primary truncate max-w-[50%]">
+                  Now Playing
+                </div>
+              ) : (
                 <div className="text-sm text-muted-foreground">
                   No track playing
                 </div>
-                <div className="flex items-center space-x-2">
-                  <Button variant="ghost" size="icon" disabled>
-                    <SkipBack className="h-4 w-4" />
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    size="icon"
-                    onClick={togglePlayPause}
-                    disabled={!embedUrl}
-                    className="h-10 w-10 rounded-full"
-                  >
-                    {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
-                  </Button>
-                  <Button variant="ghost" size="icon" disabled>
-                    <SkipForward className="h-4 w-4" />
-                  </Button>
-                </div>
-                <Button variant="ghost" size="icon" disabled={!embedUrl}>
-                  <Volume2 className="h-4 w-4" />
+              )}
+
+              <div className="flex items-center space-x-2">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  disabled={!currentTrack || !currentTrack.embedUrl}
+                >
+                  <SkipBack className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={togglePlayPause}
+                  disabled={!currentTrack || !currentTrack.embedUrl}
+                  className="h-10 w-10 rounded-full"
+                >
+                  {isPlaying ? (
+                    <Pause className="h-5 w-5" />
+                  ) : (
+                    <Play className="h-5 w-5" />
+                  )}
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  disabled={!currentTrack || !currentTrack.embedUrl}
+                >
+                  <SkipForward className="h-4 w-4" />
                 </Button>
               </div>
-            )}
-            
-            {/* Recently played tracks */}
+            </div>
+
             {history.length > 0 && (
               <div className="mt-4">
-                <h4 className="text-sm font-medium mb-2">Recently played</h4>
+                <h4 className="text-sm font-medium mb-2">History</h4>
                 <div className="space-y-2">
                   {history.map((url, index) => (
-                    <div 
-                      key={index} 
+                    <div
+                      key={index}
                       className="text-xs truncate cursor-pointer hover:text-primary flex items-center gap-1"
                       onClick={() => playFromHistory(url)}
                     >
@@ -174,6 +183,7 @@ const MusicPlayerPopup: React.FC = () => {
           </div>
         </div>
       )}
+
       <Button
         className="rounded-full h-12 w-12 flex items-center justify-center shadow-lg"
         onClick={() => setIsOpen(!isOpen)}

@@ -1,6 +1,6 @@
 
 import { Link, useLocation } from "react-router-dom";
-import { Book, Calendar, BrainCircuit, Music, GraduationCap, TestTube, Settings, LayoutDashboard } from "lucide-react";
+import { Book, Calendar, BrainCircuit, GraduationCap, TestTube, Settings, LayoutDashboard } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSidebarStore } from "@/lib/store";
@@ -21,6 +21,11 @@ export function Sidebar() {
       href: "/courses",
       icon: Book,
     },
+     {
+      title: "Course Detail",
+ href: "/courses/1",
+ icon: Book,
+ },
     {
       title: "Calendar",
       href: "/calendar",
@@ -35,11 +40,6 @@ export function Sidebar() {
       title: "Quizzes",
       href: "/quizzes",
       icon: TestTube,
-    },
-    {
-      title: "Music",
-      href: "/music",
-      icon: Music,
     },
   ];
 
