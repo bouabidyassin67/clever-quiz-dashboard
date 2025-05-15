@@ -5,7 +5,6 @@ import { RecentLearning } from "@/components/dashboard/recent-learning";
 import { EventCalendar } from "@/components/dashboard/calendar";
 import { ProgressStats } from "@/components/dashboard/progress-stats";
 import { UpcomingEvents } from "@/components/dashboard/upcoming-events";
-import { MusicPlayer } from "@/components/dashboard/music-player";
 
 const Dashboard = () => {
   return (
@@ -31,10 +30,6 @@ const Dashboard = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <ProgressStats />
                 <UpcomingEvents />
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6">
-                <MusicPlayer />
               </div>
             </div>
           </div>

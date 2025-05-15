@@ -1,12 +1,14 @@
 
 import { Link, useLocation } from "react-router-dom";
-import { Book, Calendar, BrainCircuit, Music, GraduationCap, TestTube, Settings, LayoutDashboard } from "lucide-react";
+import { Book, Calendar, BrainCircuit, Music, GraduationCap, TestTube, Settings, LayoutDashboard, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
+import { useState } from "react";
 
 export function Sidebar() {
   const location = useLocation();
   const { isAdmin } = useAuth();
+  const [collapsed, setCollapsed] = useState(false);
   
   const navItems = [
     {
@@ -51,14 +53,24 @@ export function Sidebar() {
   ];
 
   return (
-    <div className="h-screen sticky top-0 w-16 md:w-64 bg-sidebar border-r border-border shrink-0 overflow-y-auto">
+    <div 
+      className={cn(
+        "h-screen sticky top-0 bg-sidebar border-r border-border shrink-0 overflow-y-auto transition-all duration-300",
+        collapsed ? "w-16" : "w-16 md:w-64"
+      )}
+    >
       <div className="flex flex-col h-full py-4">
-        <div className="flex justify-center md:justify-start md:px-6 mb-8">
+        <div className={cn(
+          "flex justify-center md:justify-start md:px-6 mb-8",
+          collapsed && "md:justify-center md:px-0"
+        )}>
           <Link to="/" className="flex items-center">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 flex items-center justify-center text-white">
               <GraduationCap className="w-5 h-5" />
             </div>
-            <span className="hidden md:block ml-2 text-xl font-semibold">DFI Blockchain</span>
+            {!collapsed && (
+              <span className="hidden md:block ml-2 text-xl font-semibold">DFI Blockchain</span>
+            )}
           </Link>
         </div>
         
@@ -77,7 +89,7 @@ export function Sidebar() {
               )}
             >
               <item.icon className="h-5 w-5 shrink-0" />
-              <span className="hidden md:block ml-3">{item.title}</span>
+              {!collapsed && <span className="hidden md:block ml-3">{item.title}</span>}
             </Link>
           ))}
 
@@ -97,7 +109,7 @@ export function Sidebar() {
               )}
             >
               <item.icon className="h-5 w-5 shrink-0" />
-              <span className="hidden md:block ml-3">{item.title}</span>
+              {!collapsed && <span className="hidden md:block ml-3">{item.title}</span>}
             </Link>
           ))}
         </div>
@@ -108,9 +120,20 @@ export function Sidebar() {
             className="flex items-center py-2 px-2 md:px-4 rounded-md transition-colors text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
           >
             <Settings className="h-5 w-5" />
-            <span className="hidden md:block ml-3">Settings</span>
+            {!collapsed && <span className="hidden md:block ml-3">Settings</span>}
           </Link>
         </div>
+
+        {/* Collapse toggle button */}
+        <button 
+          className="flex justify-center items-center mt-4 mx-auto p-2 rounded-md hover:bg-sidebar-accent text-sidebar-foreground"
+          onClick={() => setCollapsed(!collapsed)}
+        >
+          {collapsed ? 
+            <ChevronRight className="h-5 w-5" /> : 
+            <ChevronLeft className="h-5 w-5" />
+          }
+        </button>
       </div>
     </div>
   );

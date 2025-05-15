@@ -18,6 +18,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import AdminDashboard from "./pages/AdminDashboard";
 import GlobalChatPopup from './components/GlobalChatPopup';
+import MusicPlayerPopup from './components/MusicPlayerPopup';
 import ProtectedRoute from "@/components/ProtectedRoute";
 
 const queryClient = new QueryClient();
@@ -78,8 +79,9 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
+          <GlobalChatPopup />
+          <MusicPlayerPopup />
         </AuthProvider>
- <GlobalChatPopup />
       </TooltipProvider>
     </ThemeProvider>
   </QueryClientProvider>
