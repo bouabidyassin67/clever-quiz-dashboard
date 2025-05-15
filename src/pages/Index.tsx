@@ -1,19 +1,20 @@
 
-import { Sidebar, useSidebar } from "@/components/sidebar";
+import { Sidebar } from "@/components/sidebar";
 import { Navbar } from "@/components/navbar";
 import { RecentLearning } from "@/components/dashboard/recent-learning";
 import { EventCalendar } from "@/components/dashboard/calendar";
 import { ProgressStats } from "@/components/dashboard/progress-stats";
 import { UpcomingEvents } from "@/components/dashboard/upcoming-events";
+import { useSidebarStore } from "@/lib/store";
 
 const Dashboard = () => {
-  const { collapsed, toggleSidebar } = useSidebar();
+  const { isOpen, toggle } = useSidebarStore();
   
   return (
     <div className="flex min-h-screen w-full bg-background">
-      <Sidebar collapsed={collapsed} />
+      <Sidebar />
       <div className="flex flex-col flex-1">
-        <Navbar collapsed={collapsed} toggleSidebar={toggleSidebar} />
+        <Navbar />
         <main className="flex-1 p-4 md:p-6">
           <div className="mx-auto">
             <div className="flex flex-col space-y-6">

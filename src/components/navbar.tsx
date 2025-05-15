@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ThemeSwitcher } from "./theme-switcher";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSidebarStore } from "@/lib/store";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,9 +17,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
 
-export function Navbar({ collapsed, toggleSidebar }: { collapsed?: boolean, toggleSidebar?: () => void }) {
+export function Navbar() {
   const { user, logout, isAdmin } = useAuth();
   const navigate = useNavigate();
+  const { isOpen, toggle } = useSidebarStore();
 
   const handleLogout = () => {
     logout();
@@ -28,17 +30,15 @@ export function Navbar({ collapsed, toggleSidebar }: { collapsed?: boolean, togg
   return (
     <div className="border-b border-border sticky top-0 z-30 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex h-16 items-center px-4 md:px-8">
-        {toggleSidebar && (
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={toggleSidebar}
-            className="mr-4"
-            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-          >
-            {collapsed ? <ChevronRight className="h-5 w-5" /> : <ChevronLeft className="h-5 w-5" />}
-          </Button>
-        )}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggle}
+          className="mr-4"
+          aria-label={isOpen ? "Collapse sidebar" : "Expand sidebar"}
+        >
+          {isOpen ? <ChevronLeft className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
+        </Button>
         
         <div className="ml-auto flex items-center space-x-4">
           <div className="relative hidden md:flex items-center">
@@ -63,20 +63,19 @@ export function Navbar({ collapsed, toggleSidebar }: { collapsed?: boolean, togg
                   <Bell className="h-4 w-4 text-muted-foreground" />
                 </span>
                 New message from John
-                </DropdownMenuItem>
+              </DropdownMenuItem>
               <DropdownMenuItem className="flex items-center">
                 <span className="flex items-center mr-2 pr-2 border-r border-gray-300">
                   <MessageSquare className="h-4 w-4 text-blue-500" />
                 </span>
                 Course deadline approaching
-                </DropdownMenuItem>
+              </DropdownMenuItem>
               <DropdownMenuItem className="flex items-center">
                 <span className="flex items-center mr-2 pr-2 border-r border-gray-300">
-
                   <AlertCircle className="h-4 w-4 text-orange-500" />
                 </span>
                 Your report is ready
-                <span>Course deadline approaching</span></DropdownMenuItem>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
 

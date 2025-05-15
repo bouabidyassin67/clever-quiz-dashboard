@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -16,6 +15,7 @@ import Quizzes from "./pages/Quizzes";
 import Music from "./pages/Music";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Settings from "./pages/Settings";
 import AdminDashboard from "./pages/AdminDashboard";
 import GlobalChatPopup from './components/GlobalChatPopup';
 import MusicPlayerPopup from './components/MusicPlayerPopup';
@@ -65,6 +65,11 @@ const App = () => (
               <Route path="/music" element={
                 <ProtectedRoute>
                   <Music />
+                </ProtectedRoute>
+              } />
+              <Route path="/settings" element={
+                <ProtectedRoute>
+                  <Settings />
                 </ProtectedRoute>
               } />
               

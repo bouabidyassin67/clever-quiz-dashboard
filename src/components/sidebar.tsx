@@ -3,11 +3,12 @@ import { Link, useLocation } from "react-router-dom";
 import { Book, Calendar, BrainCircuit, Music, GraduationCap, TestTube, Settings, LayoutDashboard } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
-import { useState, useEffect } from "react";
+import { useSidebarStore } from "@/lib/store";
 
-export function Sidebar({ collapsed = false }) {
+export function Sidebar() {
   const location = useLocation();
   const { isAdmin } = useAuth();
+  const isOpen = useSidebarStore((state) => state.isOpen);
   
   const navItems = [
     {
@@ -55,19 +56,19 @@ export function Sidebar({ collapsed = false }) {
     <div 
       className={cn(
         "h-screen sticky top-0 bg-sidebar border-r border-border shrink-0 overflow-y-auto transition-all duration-300",
-        collapsed ? "w-16" : "w-16 md:w-64"
+        isOpen ? "w-16 md:w-64" : "w-16"
       )}
     >
       <div className="flex flex-col h-full py-4">
         <div className={cn(
           "flex justify-center mb-8", 
-          !collapsed && "md:justify-start md:px-6"
+          isOpen && "md:justify-start md:px-6"
         )}>
           <Link to="/" className="flex items-center">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 flex items-center justify-center text-white">
               <GraduationCap className="w-5 h-5" />
             </div>
-            {!collapsed && (
+            {isOpen && (
               <span className="hidden md:block ml-2 text-xl font-semibold">DFI Blockchain</span>
             )}
           </Link>
@@ -82,14 +83,14 @@ export function Sidebar({ collapsed = false }) {
                 "flex items-center py-2 px-2 md:px-4 rounded-md transition-colors",
                 "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                 "focus:bg-sidebar-accent focus:text-sidebar-accent-foreground",
-                collapsed ? "justify-center" : "",
+                !isOpen ? "justify-center" : "",
                 location.pathname === item.href 
                   ? "bg-primary/10 text-primary font-medium" 
                   : "text-sidebar-foreground"
               )}
             >
               <item.icon className="h-5 w-5 shrink-0" />
-              {!collapsed && <span className="hidden md:block ml-3">{item.title}</span>}
+              {isOpen && <span className="hidden md:block ml-3">{item.title}</span>}
             </Link>
           ))}
 
@@ -103,14 +104,14 @@ export function Sidebar({ collapsed = false }) {
                 "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                 "focus:bg-sidebar-accent focus:text-sidebar-accent-foreground",
                 "border-l-4 border-primary",
-                collapsed ? "justify-center" : "",
+                !isOpen ? "justify-center" : "",
                 location.pathname === item.href 
                   ? "bg-primary/10 text-primary font-medium" 
                   : "text-sidebar-foreground"
               )}
             >
               <item.icon className="h-5 w-5 shrink-0" />
-              {!collapsed && <span className="hidden md:block ml-3">{item.title}</span>}
+              {isOpen && <span className="hidden md:block ml-3">{item.title}</span>}
             </Link>
           ))}
         </div>
@@ -120,21 +121,14 @@ export function Sidebar({ collapsed = false }) {
             to="/settings"
             className={cn(
               "flex items-center py-2 px-2 md:px-4 rounded-md transition-colors text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-              collapsed ? "justify-center" : ""
+              !isOpen ? "justify-center" : ""
             )}
           >
             <Settings className="h-5 w-5" />
-            {!collapsed && <span className="hidden md:block ml-3">Settings</span>}
+            {isOpen && <span className="hidden md:block ml-3">Settings</span>}
           </Link>
         </div>
       </div>
     </div>
   );
-}
-
-export function useSidebar() {
-  const [collapsed, setCollapsed] = useState(false);
-  const toggleSidebar = () => setCollapsed(!collapsed);
-  
-  return { collapsed, toggleSidebar };
 }
