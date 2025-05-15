@@ -1,27 +1,34 @@
-
-import React, { useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Music, X, Play, Pause, SkipBack, SkipForward, Volume2, ExternalLink, Youtube } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { toast } from 'sonner';
-import { useMusic } from '@/contexts/MusicContext';
 
 const MusicPlayerPopup: React.FC = () => {
-  const { 
-    isOpen, 
-    setIsOpen, 
-    isPlaying, 
-    setIsPlaying,
-    youtubeUrl,
-    setYoutubeUrl,
-    embedUrl,
-    setEmbedUrl,
-    history,
-    setHistory
-  } = useMusic();
-  
+  const [isOpen, setIsOpen] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [youtubeUrl, setYoutubeUrl] = useState('');
+  const [embedUrl, setEmbedUrl] = useState('');
+  const [history, setHistory] = useState<string[]>([]);
   const audioRef = useRef<HTMLIFrameElement>(null);
+  
+  // Load history from localStorage on component mount
+  useEffect(() => {
+    const savedHistory = localStorage.getItem('music-history');
+    if (savedHistory) {
+      try {
+        setHistory(JSON.parse(savedHistory));
+      } catch (e) {
+        console.error("Failed to parse music history", e);
+      }
+    }
+  }, []);
+  
+  // Save history to localStorage when it changes
+  useEffect(() => {
+    localStorage.setItem('music-history', JSON.stringify(history));
+  }, [history]);
   
   const togglePlayPause = () => {
     setIsPlaying(!isPlaying);
@@ -45,7 +52,7 @@ const MusicPlayerPopup: React.FC = () => {
         
         // Add to history if not already there
         if (!history.includes(youtubeUrl)) {
-          setHistory([youtubeUrl, ...history.slice(0, 4)]);
+          setHistory(prev => [youtubeUrl, ...prev.slice(0, 4)]);
         }
         
         toast.success("Now playing from YouTube");
@@ -73,9 +80,9 @@ const MusicPlayerPopup: React.FC = () => {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end">
+    <div className="fixed bottom-4 right-20 z-50 flex flex-col items-end">
       {isOpen && (
-        <div className="fixed bottom-20 right-4 w-72 h-96 bg-card border border-border rounded-lg shadow-xl flex flex-col overflow-hidden animate-in fade-in duration-300 slide-in-from-bottom-right">
+        <div className="fixed bottom-20 right-20 w-72 h-96 bg-card border border-border rounded-lg shadow-xl flex flex-col overflow-hidden animate-in fade-in duration-300 slide-in-from-bottom-right">
           <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-card text-card-foreground">
             <h3 className="text-md font-semibold flex items-center gap-2">
               <Youtube className="h-4 w-4 text-red-500" />
